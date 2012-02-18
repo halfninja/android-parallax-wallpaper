@@ -67,24 +67,24 @@ public class ParallaxWallpaper extends WallpaperService {
     }
     
     static class Layer {
-    	public Bitmap bitmap;
-    	private float scale = 1.0f;
-    	private Matrix matrix = new Matrix();
-    	public Layer(Bitmap b) {
-    		this.bitmap = b;
-    	}
-    	public void setScale(float factor) {
-    		scale = factor;
-    	}
-    	public Matrix getMatrix(float x, float y) {
-    		if (scale == 1) {
-    			matrix.reset();
-    		} else {
-    			matrix.setScale(scale, scale);
-    		}
-    		matrix.postTranslate(x, y);
-    		return matrix;
-    	}
+        public Bitmap bitmap;
+        private float scale = 1.0f;
+        private Matrix matrix = new Matrix();
+        public Layer(Bitmap b) {
+            this.bitmap = b;
+        }
+        public void setScale(float factor) {
+            scale = factor;
+        }
+        public Matrix getMatrix(float x, float y) {
+            if (scale == 1) {
+                matrix.reset();
+            } else {
+                matrix.setScale(scale, scale);
+            }
+            matrix.postTranslate(x, y);
+            return matrix;
+        }
     }
     
     
@@ -92,9 +92,8 @@ public class ParallaxWallpaper extends WallpaperService {
     class ParallaxEngine extends Engine 
         implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-        
 
-		private final Handler mHandler = new Handler();
+        private final Handler mHandler = new Handler();
 
         private float mOffset;
         private float mTouchX = -1;
@@ -114,11 +113,11 @@ public class ParallaxWallpaper extends WallpaperService {
         private boolean mVisible;
         private SharedPreferences mPrefs;
 
-		private Rect mFrame;
+        private Rect mFrame;
 
-		private int mHeight;
+        private int mHeight;
 
-		private Matcher matcher;
+        private Matcher matcher;
 
         ParallaxEngine() {
             mStartTime = SystemClock.elapsedRealtime();
@@ -129,32 +128,32 @@ public class ParallaxWallpaper extends WallpaperService {
         }
 
         public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-        	String customPath = prefs.getString(ParallaxWallpaperSettings.CUSTOM_PATH_ACTUAL_KEY, null);
-        	Log.d(TAG, "customPath: " + customPath);
-        	if (customPath != null) {
-        		layerFiles.clear();
-	        	Pattern p = Pattern.compile("(.+)(\\d+)(\\..+)");
-	        	matcher = p.matcher(customPath);
-	        	if (matcher.matches()) {
-	        		String prefix = matcher.group(1);
-	        		String suffix = matcher.group(3);
-	        		findfiles: for (int i=1; i<9; i++) {
-	        			File f = new File(prefix + i + suffix);
-	        			if (f.isFile()) {
-	        				Log.d(TAG, f.getAbsolutePath() + " is a file");
-	        				layerFiles.add(f.getAbsolutePath());
-	        			} else {
-	        				Log.d(TAG, "No more files found");
-	        				break findfiles;
-	        			}
-	        		}
-	        	} else {
-	        		Log.i(TAG, "Filename didn't end in a number - just using the one layer.");
-	        		layerFiles.add(customPath);
-	        	}
-	        	Log.d(TAG, "Done finding layers, now to load them up");
-	        	loadLayers();
-        	}
+            String customPath = prefs.getString(ParallaxWallpaperSettings.CUSTOM_PATH_ACTUAL_KEY, null);
+            Log.d(TAG, "customPath: " + customPath);
+            if (customPath != null) {
+                layerFiles.clear();
+                Pattern p = Pattern.compile("(.+)(\\d+)(\\..+)");
+                matcher = p.matcher(customPath);
+                if (matcher.matches()) {
+                    String prefix = matcher.group(1);
+                    String suffix = matcher.group(3);
+                    findfiles: for (int i=1; i<9; i++) {
+                        File f = new File(prefix + i + suffix);
+                        if (f.isFile()) {
+                            Log.d(TAG, f.getAbsolutePath() + " is a file");
+                            layerFiles.add(f.getAbsolutePath());
+                        } else {
+                            Log.d(TAG, "No more files found");
+                            break findfiles;
+                        }
+                    }
+                } else {
+                    Log.i(TAG, "Filename didn't end in a number - just using the one layer.");
+                    layerFiles.add(customPath);
+                }
+                Log.d(TAG, "Done finding layers, now to load them up");
+                loadLayers();
+            }
         }
 
         @Override
@@ -166,34 +165,34 @@ public class ParallaxWallpaper extends WallpaperService {
             onSharedPreferenceChanged(mPrefs, null);
         }
 
-		private void loadLayers() {
-			try {
-				clearLayers();
-				for (String file: layerFiles) {
-					addLayer(file);
-				}
-				recalibrateLayers();
+        private void loadLayers() {
+            try {
+                clearLayers();
+                for (String file: layerFiles) {
+                    addLayer(file);
+                }
+                recalibrateLayers();
             } catch (IOException e) {
-            	Log.e(TAG, "I/O error loading wallpaper", e);
-            	layers.clear();
-            	Toast.makeText(ParallaxWallpaper.this, "There was a problem loading the parallax wallpaper.", Toast.LENGTH_LONG).show();
+                Log.e(TAG, "I/O error loading wallpaper", e);
+                layers.clear();
+                Toast.makeText(ParallaxWallpaper.this, "There was a problem loading the parallax wallpaper.", Toast.LENGTH_LONG).show();
             }
-		}
+        }
         
         private void addLayer(String name) throws IOException {
-        	Bitmap layer = BitmapFactory.decodeFile(name);
-        	if (layer == null) {
-        		throw new IOException("BitmapFactory couldn't decode asset " + name);
-        	}
-        	synchronized(layers) {
-        		layers.add(new Layer(layer));
-        	}
+            Bitmap layer = BitmapFactory.decodeFile(name);
+            if (layer == null) {
+                throw new IOException("BitmapFactory couldn't decode asset " + name);
+            }
+            synchronized(layers) {
+                layers.add(new Layer(layer));
+            }
         }
         
         private void clearLayers() {
-        	synchronized(layers) {
-        		layers.clear();
-        	}
+            synchronized(layers) {
+                layers.clear();
+            }
         }
 
         @Override
@@ -234,13 +233,13 @@ public class ParallaxWallpaper extends WallpaperService {
          * covers the screen, so it could look stupid.
          */
         private void recalibrateLayers() {
-			for (Layer layer : layers) {
-				final int bitmapHeight = layer.bitmap.getHeight();
-				layer.setScale((float)mHeight / (float)bitmapHeight);
-			}
-		}
+            for (Layer layer : layers) {
+                final int bitmapHeight = layer.bitmap.getHeight();
+                layer.setScale((float)mHeight / (float)bitmapHeight);
+            }
+        }
 
-		@Override
+        @Override
         public void onSurfaceCreated(SurfaceHolder holder) {
             super.onSurfaceCreated(holder);
         }
@@ -280,25 +279,25 @@ public class ParallaxWallpaper extends WallpaperService {
 
         }
 
-		private void drawNonsense(Canvas c) {
-			int w = (int)(mOffset*255);
-			int frameWidth = mFrame.width();
-			
-//			synchronized(layers) {
-				for (int i=layers.size()-1; i>=0; i--) {
-					Layer layer = layers.get(i);
-					Bitmap bitmap = layer.bitmap;
-					float bitmapWidth = bitmap.getWidth() * layer.scale;
-					float max = frameWidth - bitmapWidth;
-					float offset = mOffset * max;
-					
-					final Matrix m = layer.getMatrix(offset, 0);
-					
-					// TODO tile to fit width when narrower than screen.
-					c.drawBitmap(bitmap, m, null);
-				}
-//			}
-		}
+        private void drawNonsense(Canvas c) {
+            int w = (int)(mOffset*255);
+            int frameWidth = mFrame.width();
+            
+//            synchronized(layers) {
+                for (int i=layers.size()-1; i>=0; i--) {
+                    Layer layer = layers.get(i);
+                    Bitmap bitmap = layer.bitmap;
+                    float bitmapWidth = bitmap.getWidth() * layer.scale;
+                    float max = frameWidth - bitmapWidth;
+                    float offset = mOffset * max;
+                    
+                    final Matrix m = layer.getMatrix(offset, 0);
+                    
+                    // TODO tile to fit width when narrower than screen.
+                    c.drawBitmap(bitmap, m, null);
+                }
+//            }
+        }
 
         
     }
