@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- General -->
+    <skip />
+    <!-- Application name -->
+    <string name="app_name">Parallax Wallpapers</string>
+    
+    <string name="wallpaper_settings">Parallax Wallpaper Settings</string>
+
+	<string name="custom_path_title">Image path</string>
+	<string name="custom_path_summary">None currently selected</string>
+    
+</resources>
