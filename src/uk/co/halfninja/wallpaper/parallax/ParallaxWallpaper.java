@@ -184,6 +184,10 @@ public class ParallaxWallpaper extends WallpaperService {
                 Log.e(TAG, "I/O error loading wallpaper", e);
                 layers.clear();
                 Toast.makeText(ParallaxWallpaper.this, "There was a problem loading the parallax wallpaper.", Toast.LENGTH_LONG).show();
+            } catch (OutOfMemoryError oom) {
+                Log.e(TAG, "Ran out of memory while loading wallpaper.", oom);
+            	layers.clear();
+            	Toast.makeText(ParallaxWallpaper.this, "Whoops, we ran out of memory trying to load the images. Try using fewer layers, or resize them to be smaller.", Toast.LENGTH_LONG).show();
             }
         }
         
