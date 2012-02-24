@@ -1,23 +1,6 @@
-/*
- * Copyright (C) 2009 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package uk.co.halfninja.wallpaper.parallax;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +14,6 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.service.wallpaper.WallpaperService;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -95,7 +77,6 @@ public class ParallaxWallpaper extends WallpaperService {
         if (file.exists()) { 
             if (matcher.matches()) {
                 String prefix = matcher.group(1);
-                String number = matcher.group(2);
                 String suffix = matcher.group(3);
                 for (int i=1; i<9; i++) {
                     File f = new File(prefix + i + suffix);
@@ -120,11 +101,6 @@ public class ParallaxWallpaper extends WallpaperService {
         private final Handler mHandler = new Handler();
 
         private float mOffset;
-        private float mTouchX = -1;
-        private float mTouchY = -1;
-        private long mStartTime;
-        private float mCenterX;
-        private float mCenterY;
         
         private List<Layer> layers = new ArrayList<Layer>();
         private List<String> layerFiles = new ArrayList<String>();
@@ -134,25 +110,17 @@ public class ParallaxWallpaper extends WallpaperService {
                 drawFrame();
             }
         };
-        private boolean mVisible;
         private SharedPreferences mPrefs;
 
         private Rect mFrame;
 
         private int mHeight;
 
-//        private Matcher matcher;
-
         ParallaxEngine() {
-            mStartTime = SystemClock.elapsedRealtime();
-
             mPrefs = ParallaxWallpaper.this.getSharedPreferences(SHARED_PREFS_NAME, 0);
             mPrefs.registerOnSharedPreferenceChangeListener(this);
-            
         }
         
-        
-
         public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
             String customPath = prefs.getString(ParallaxWallpaperSettings.CUSTOM_PATH_ACTUAL_KEY, null);
             Log.d(TAG, "customPath: " + customPath);
@@ -168,8 +136,6 @@ public class ParallaxWallpaper extends WallpaperService {
         public void onCreate(SurfaceHolder surfaceHolder) {
             super.onCreate(surfaceHolder);
             setTouchEventsEnabled(false);
-            
-            //loadLayers();
             onSharedPreferenceChanged(mPrefs, null);
         }
 
@@ -215,7 +181,6 @@ public class ParallaxWallpaper extends WallpaperService {
 
         @Override
         public void onVisibilityChanged(boolean visible) {
-            mVisible = visible;
             if (visible) {
                 drawFrame();
             } else {
@@ -226,9 +191,6 @@ public class ParallaxWallpaper extends WallpaperService {
         @Override
         public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
             super.onSurfaceChanged(holder, format, width, height);
-            // store the center of the surface, so we can draw the cube in the right spot
-            mCenterX = width/2.0f;
-            mCenterY = height/2.0f;
             
             mHeight = height;
             
@@ -259,7 +221,6 @@ public class ParallaxWallpaper extends WallpaperService {
         @Override
         public void onSurfaceDestroyed(SurfaceHolder holder) {
             super.onSurfaceDestroyed(holder);
-            mVisible = false;
             mHandler.removeCallbacks(mDraw);
         }
 
@@ -273,8 +234,6 @@ public class ParallaxWallpaper extends WallpaperService {
         void drawFrame() {
             final SurfaceHolder holder = getSurfaceHolder();
             final Rect frame = holder.getSurfaceFrame();
-            final int width = frame.width();
-            final int height = frame.height();
 
             mFrame = frame;
             
@@ -292,23 +251,20 @@ public class ParallaxWallpaper extends WallpaperService {
         }
 
         private void drawNonsense(Canvas c) {
-            int w = (int)(mOffset*255);
             int frameWidth = mFrame.width();
             
-//            synchronized(layers) {
-                for (int i=layers.size()-1; i>=0; i--) {
-                    Layer layer = layers.get(i);
-                    Bitmap bitmap = layer.bitmap;
-                    float bitmapWidth = bitmap.getWidth() * layer.scale;
-                    float max = frameWidth - bitmapWidth;
-                    float offset = mOffset * max;
-                    
-                    final Matrix m = layer.getMatrix(offset, 0);
-                    
-                    // TODO tile to fit width when narrower than screen.
-                    c.drawBitmap(bitmap, m, null);
-                }
-//            }
+            for (int i=layers.size()-1; i>=0; i--) {
+                Layer layer = layers.get(i);
+                Bitmap bitmap = layer.bitmap;
+                float bitmapWidth = bitmap.getWidth() * layer.scale;
+                float max = frameWidth - bitmapWidth;
+                float offset = mOffset * max;
+                
+                final Matrix m = layer.getMatrix(offset, 0);
+                
+                // TODO tile to fit width when narrower than screen.
+                c.drawBitmap(bitmap, m, null);
+            }
         }
 
         

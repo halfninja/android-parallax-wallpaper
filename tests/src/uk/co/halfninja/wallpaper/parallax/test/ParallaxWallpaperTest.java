@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import uk.co.halfninja.wallpaper.parallax.ParallaxWallpaper;
-import android.os.Environment;
 import android.test.AndroidTestCase;
 
 public class ParallaxWallpaperTest extends AndroidTestCase {
