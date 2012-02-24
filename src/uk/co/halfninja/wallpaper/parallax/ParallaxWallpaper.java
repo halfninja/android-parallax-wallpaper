@@ -127,11 +127,16 @@ public class ParallaxWallpaper extends WallpaperService {
             
         }
 
+        /**
+          * Based on the custom_path in the settings, it tries to find additional layers
+          * by name-convention (string)(integer:layer_number)(.extension).
+          */
         public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
             String customPath = prefs.getString(ParallaxWallpaperSettings.CUSTOM_PATH_ACTUAL_KEY, null);
             Log.d(TAG, "customPath: " + customPath);
             if (customPath != null) {
                 layerFiles.clear();
+                // wallpaper-layer03.jpg -> (wallpaper-layer)(03)(.jpg)
                 Pattern p = Pattern.compile("(.+)(\\d+)(\\..+)");
                 matcher = p.matcher(customPath);
                 if (matcher.matches()) {
