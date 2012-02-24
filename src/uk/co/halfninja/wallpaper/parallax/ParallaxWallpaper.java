@@ -17,6 +17,7 @@
 package uk.co.halfninja.wallpaper.parallax;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Rect;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.service.wallpaper.WallpaperService;
@@ -87,7 +87,31 @@ public class ParallaxWallpaper extends WallpaperService {
         }
     }
     
-    
+    public static List<String> findLayers(String path) {
+    	List<String> files = new ArrayList<String>();
+        Pattern p = Pattern.compile("(.+)([1-9]\\d*)(\\..+)");
+        Matcher matcher = p.matcher(path);
+        File file = new File(path);
+        if (file.exists()) { 
+            if (matcher.matches()) {
+                String prefix = matcher.group(1);
+                String number = matcher.group(2);
+                String suffix = matcher.group(3);
+                for (int i=1; i<9; i++) {
+                    File f = new File(prefix + i + suffix);
+                    if (f.isFile()) {
+                        files.add(f.getAbsolutePath());
+                    } else {
+                        break;
+                    }
+                }
+            } else {
+                Log.i(TAG, "Filename didn't end in a number - just using the one layer.");
+                files.add(path);
+            }
+        }
+    	return files;
+    }
 
     class ParallaxEngine extends Engine 
         implements SharedPreferences.OnSharedPreferenceChangeListener {
@@ -117,7 +141,7 @@ public class ParallaxWallpaper extends WallpaperService {
 
         private int mHeight;
 
-        private Matcher matcher;
+//        private Matcher matcher;
 
         ParallaxEngine() {
             mStartTime = SystemClock.elapsedRealtime();
@@ -126,31 +150,15 @@ public class ParallaxWallpaper extends WallpaperService {
             mPrefs.registerOnSharedPreferenceChangeListener(this);
             
         }
+        
+        
 
         public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
             String customPath = prefs.getString(ParallaxWallpaperSettings.CUSTOM_PATH_ACTUAL_KEY, null);
             Log.d(TAG, "customPath: " + customPath);
             if (customPath != null) {
                 layerFiles.clear();
-                Pattern p = Pattern.compile("(.+)(\\d+)(\\..+)");
-                matcher = p.matcher(customPath);
-                if (matcher.matches()) {
-                    String prefix = matcher.group(1);
-                    String suffix = matcher.group(3);
-                    findfiles: for (int i=1; i<9; i++) {
-                        File f = new File(prefix + i + suffix);
-                        if (f.isFile()) {
-                            Log.d(TAG, f.getAbsolutePath() + " is a file");
-                            layerFiles.add(f.getAbsolutePath());
-                        } else {
-                            Log.d(TAG, "No more files found");
-                            break findfiles;
-                        }
-                    }
-                } else {
-                    Log.i(TAG, "Filename didn't end in a number - just using the one layer.");
-                    layerFiles.add(customPath);
-                }
+                layerFiles.addAll(findLayers(customPath));
                 Log.d(TAG, "Done finding layers, now to load them up");
                 loadLayers();
             }
