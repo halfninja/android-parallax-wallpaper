@@ -95,7 +95,7 @@ public final class ParallaxWallpaperRenderer implements Renderer {
 			}
 		} catch (IOException e) {
 			Log.e(TAG, "Error loading textures", e);
-			Toast.makeText(context, "Error loading layers.", Toast.LENGTH_LONG).show();
+			//Toast.makeText(context, "Error loading layers.", Toast.LENGTH_LONG).show();
 		}
 	}
 
