@@ -9,5 +9,17 @@
 
 	<string name="custom_path_title">Image path</string>
 	<string name="custom_path_summary">None currently selected</string>
+	<string name="settings_description">Your layer files should have the same name except for a number
+		at the end of the name, starting with 1 for the topmost layer.   
+	</string>
+	<string name="settings_description2">Example:\n
+		mybackground1.png\n
+		mybackground2.png\n
+		mybackground3.png  
+	</string>
+	<string name="settings_description3">
+	    Pick one of the layer files, and I\'ll try to find the rest of them.
+	</string>
+	<string name="settings_choose_button">Pick an image</string>
     
 </resources>
