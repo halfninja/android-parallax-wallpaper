@@ -110,8 +110,6 @@ public class ParallaxWallpaperSettings extends PreferenceActivity
         customPathPreference.setText(Environment.getExternalStorageDirectory().getAbsolutePath());
     }
 
-
-
     private boolean hasText(String text) {
         return text != null && text.trim().length() > 0;
     }
