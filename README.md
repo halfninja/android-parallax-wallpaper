@@ -11,9 +11,9 @@ them, so they will probably be 32-bit PNG files.
 
 ## Potential improvements
 
-* OpenGL acceleration
+* -OpenGL acceleration-
 * Save previously used layer sets for easy re-use
 * Support layers packed into a single file
 * An online gallery to choose some nice ready made sets
-* A more sensible settings screen
-* A proper thumbnail icon
+* -A more sensible settings screen-
+* -A proper thumbnail icon-
