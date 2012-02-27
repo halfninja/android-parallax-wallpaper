@@ -20,8 +20,8 @@
 <!-- The attributes in this XML file provide configuration information -->
 
 <wallpaper xmlns:android="http://schemas.android.com/apk/res/android"
-       android:settingsActivity="uk.co.halfninja.wallpaper.parallax.ParallaxWallpaperSettingsHome"
-       android:thumbnail="@drawable/ic_launcher_wallpaper"
+       android:settingsActivity="uk.co.halfninja.wallpaper.parallax.ParallaxWallpaperSettings"
+       android:thumbnail="@drawable/icon"
 />
 
  

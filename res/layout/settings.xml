@@ -5,31 +5,23 @@
 
 <LinearLayout 
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical" >
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Pick your layers"
-        android:padding="4sp"
+        android:text="@string/settings_title"
+        android:paddingLeft="8sp"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <TextView
+    <TextView
         android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="4sp"
-        android:text="@string/settings_description" />
-
-    <TextView
-        android:id="@+id/description2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:padding="8sp"
-        android:text="@string/settings_description2" />
+        android:text="@string/settings_description" />
+
     
     <TextView
         android:id="@+id/description3"
@@ -38,8 +30,16 @@
         android:layout_gravity="center_horizontal"
         android:padding="8sp"
         android:text="@string/settings_description3" />
-
-    <Button
+    
+    <TextView
+        android:id="@+id/selectedImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="8sp"
+        android:textSize="14sp"
+        android:visibility="gone" />
+    <Button
         android:id="@+id/selectLayersButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -49,6 +49,15 @@
         android:layout_marginRight="16sp"
         android:text="@string/settings_choose_button" />
 
+    
+    <TextView
+        android:id="@+id/description2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="8sp"
+        android:text="@string/settings_description2" />
+    
 </LinearLayout>
 
 </ScrollView>
