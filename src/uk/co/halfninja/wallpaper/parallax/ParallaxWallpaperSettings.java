@@ -22,7 +22,7 @@ public class ParallaxWallpaperSettings extends Activity implements OnSharedPrefe
     private static final int REQ_CODE_PICK_IMAGE = 100001;
     
     private final Context context = this; // for convenience in inner classes
-    
+
     private SharedPreferences preferences;
 	private Button pickButton;
 	private TextView selectedImage;
