@@ -1,3 +1,7 @@
+# Inactive project
+
+Feel free to make use of this code in any way you like, but I haven't looked at it in years and it probably doesn't work very well and will not be able to provide support for you, especially over Twitter. Have fun!
+
 # Parallax live wallpapers
 
 This is a basic Android app that provides customisable multi-layer wallpapers.
